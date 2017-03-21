@@ -3,7 +3,7 @@
  * of nodes, each of which has some data and a reference to the next node.  The nodes
  * do not have to be contiguous in memory, since each node knows how to get to the next node.
  * We need to keep track of only the first node (head) of the list.
- * 
+ * ....
  */
 public class LinkedListGeneric<E> implements ListGeneric<E> {
 
