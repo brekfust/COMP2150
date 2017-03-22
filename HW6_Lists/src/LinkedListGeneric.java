@@ -18,6 +18,8 @@ public class LinkedListGeneric<E> implements ListGeneric<E> {
 		Node<E> current = head;
 		Node<E> next = head.getNext();
 		Node<E> temp;
+		//if the next node(or this one) is not the tail, get a reference to it's neighbor, point it to current, and the neighbor
+		//will be checked in the next loop.
 		while (next != null && next.getNext() != null) {
 			temp = next.getNext();
 			next.setNext(current);
@@ -29,19 +31,60 @@ public class LinkedListGeneric<E> implements ListGeneric<E> {
 		head.setNext(current);
 	}
 	
+//	first try, simpler but relies on remove() which means traversing list twice.
+//	public E remove(E item) {
+//		//keep count so we can use remove(index)
+//		int curIndex = 0;
+//		Node<E> current = head;
+//		while (current != null) {
+//			if (current.getData().equals(item)){
+//				this.remove(curIndex);
+//				return current.getData();
+//			}
+//			current = current.getNext();
+//			curIndex++;
+//		}
+//		return null;
+//	}
+	
 	public E remove(E item) {
-		//keep count so we can use remove(index)
-		int curIndex = 0;
-		Node<E> current = head;
-		while (current != null) {
-			if (current.getData().equals(item)){
-				this.remove(curIndex);
+		//empty
+		if (this.size == 0)
+			return null;
+		
+		//remove head
+		else if (head.getData().equals(item)) {
+			Node<E> oldHead = head;
+			head = head.getNext();
+			this.size--;
+			return oldHead.getData();
+			
+		//list is only 1 long and it's not the item
+		} else if (this.size == 1) {
+			return null;
+		}
+		
+		//traverse list, keep track of previous to make removal easier without another traversal
+		Node<E> previous = head;
+		Node<E> current;
+		for (current = head.getNext(); current.getNext() != null; current = current.getNext()) {
+			if (current.getData().equals(item)) {
+				previous.setNext(current.getNext());
+				this.size--;
 				return current.getData();
 			}
-			current = current.getNext();
-			curIndex++;
+			previous = current;
 		}
-		return null;
+		//made it to tail
+		if (current.getData().equals(item)) {
+			previous.setNext(null);
+			this.size--;
+			return current.getData();
+			
+		//made it to end, never found item
+		} else {
+			return null;
+		}
 	}
 	
 	public ArrayListGeneric<E> toArrayList()
@@ -137,12 +180,19 @@ public class LinkedListGeneric<E> implements ListGeneric<E> {
 //			System.out.println(theList.get(i));
 		//Homework test
 		System.out.println("\nHomework tests:");
+		LinkedListGeneric<String> emptyList = new LinkedListGeneric<>();
+		//emptyList.add("derp");
+		//emptyList.add("test");
 		theList.reverse();
 		for (int i = 0; i < theList.size; i++)
 			System.out.println(theList.get(i));
-		System.out.println("Remove Cogsworth");
+		System.out.println(theList.toArrayList());
+		System.out.println("\nRemove Cogsworth");
 		theList.remove("Cogsworth");
-		System.out.print(theList.toArrayList());
+		System.out.println(theList.toArrayList());
+		System.out.println(emptyList.toArrayList());
+		emptyList.remove("test");
+		System.out.println(emptyList.toArrayList());
 	}
 	
 

@@ -11,9 +11,10 @@ public class ArrayListGeneric<E> implements ListGeneric<E> {
     
     //BEGIN HOMEWORK METHODS
     public ArrayListGeneric<E> slice(int beginIndex, int endIndex) {
-    	if (beginIndex < 0 || endIndex > this.size || beginIndex >= endIndex) {
+    	//check if indexes are OK
+    	if (beginIndex < 0 || endIndex > this.size || beginIndex >= endIndex) 
     		throw new IndexOutOfBoundsException();
-    	}
+    	//create new array and fill
     	ArrayListGeneric<E> outList = new ArrayListGeneric<>();
     	for (int i = beginIndex; i < endIndex; i++) {
     		outList.add(this.get(i));
@@ -22,11 +23,14 @@ public class ArrayListGeneric<E> implements ListGeneric<E> {
     }
     
     public void addAll(ArrayListGeneric<E> anotherList) {
-    		for (int i = 0; i < anotherList.size; i++) 
+    	//Is this against the spirit of the homework question? Don't see a reason not to use add() and defer array
+    	//allocation to it, this seems to work OK.
+    	for (int i = 0; i < anotherList.size; i++) 
     			this.add(anotherList.get(i));
     }
     
     public void trimToSize() {
+    	//create array of the exact size and fill, set data pointer to new object
     	E[] newData = (E[])(new Object[size]);
     	for (int i = 0; i < size; i++) {
     		newData[i] = data[i];
@@ -114,6 +118,7 @@ public class ArrayListGeneric<E> implements ListGeneric<E> {
         System.out.println(myBetterList);
         
         System.out.println("HOMEWORK TESTS");
+        ArrayListGeneric<String> emptyList = new ArrayListGeneric<>();
         ArrayListGeneric<String> newList = new ArrayListGeneric<>();
         newList.addAll(myBetterList);
         newList.addAll(myBetterList);
@@ -124,9 +129,10 @@ public class ArrayListGeneric<E> implements ListGeneric<E> {
         ArrayListGeneric<String> slicedList = newList.slice(5,6);
         slicedList.trimToSize();
         System.out.println(slicedList);
-
+        System.out.println("Slice empty list?");
+        System.out.println(emptyList.slice(0, 0));
         // if you really wanted to, you could create a list within a list!
-        ListGeneric<ListGeneric<String>> hugeList = new ArrayListGeneric<>();
-        hugeList.add(myBetterList);
+        //ListGeneric<ListGeneric<String>> hugeList = new ArrayListGeneric<>();
+        //hugeList.add(myBetterList);
     }
 }
