@@ -30,7 +30,7 @@ public class LinkedListGeneric<E> implements ListGeneric<E> {
 	}
 	
 	public E remove(E item) {
-		//keep count so we can use remove(index) method
+		//keep count so we can use remove(index)
 		int curIndex = 0;
 		Node<E> current = head;
 		while (current != null) {
@@ -140,7 +140,8 @@ public class LinkedListGeneric<E> implements ListGeneric<E> {
 		theList.reverse();
 		for (int i = 0; i < theList.size; i++)
 			System.out.println(theList.get(i));
-		
+		System.out.println("Remove Cogsworth");
+		theList.remove("Cogsworth");
 		System.out.print(theList.toArrayList());
 	}
 	

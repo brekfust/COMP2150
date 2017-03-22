@@ -22,18 +22,8 @@ public class ArrayListGeneric<E> implements ListGeneric<E> {
     }
     
     public void addAll(ArrayListGeneric<E> anotherList) {
-    	//can't get arraylist size, it's private, so go until we get an exception and
-    	//just deal with it
-    	int index = 0;
-    	try {
-    		while(true){
-    			this.add(anotherList.get(index));
-    			index++;
-    		}
-    	}
-    	catch (ArrayIndexOutOfBoundsException e) {
-    		//it's fine! we're done!
-    	}
+    		for (int i = 0; i < anotherList.size; i++) 
+    			this.add(anotherList.get(i));
     }
     
     public void trimToSize() {
@@ -131,7 +121,7 @@ public class ArrayListGeneric<E> implements ListGeneric<E> {
         System.out.println(newList);
         newList.trimToSize();
         System.out.println(newList);
-        ArrayListGeneric<String> slicedList = newList.slice(-1,1);
+        ArrayListGeneric<String> slicedList = newList.slice(5,6);
         slicedList.trimToSize();
         System.out.println(slicedList);
 
