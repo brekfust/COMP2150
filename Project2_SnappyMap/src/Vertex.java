@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 
 public class Vertex {
 //	This should include an instance variable for the vertex’s name, as well as 
@@ -5,14 +6,50 @@ public class Vertex {
 //	(distance, visited status, and previous vertex).You can assume that all vertices
 //	in the graph will have unique names
 	
-	final private double inf = Double.POSITIVE_INFINITY;
+	final public double inf = Double.POSITIVE_INFINITY;
+	private String name;
 	private double distance;
 	private boolean isVisited;
 	private Vertex previous;
+	//is this OK? Should Vertex be able to use Edge?
+	private ArrayList<Edge> neighbors;
 	
-	public Vertex() {
+	public Vertex(String n) {
+		name = n;
 		distance = inf;
 		isVisited = false;
+		neighbors = new ArrayList<>();
+	}
+	
+	//need this to do a proper arraylist.contains
+	public boolean equals(Object o) {
+		if (o instanceof Vertex) {
+			Vertex isIt = (Vertex)o;
+			return (isIt.getName().equals(this.name));
+		}
+		return false;
+	}
+	
+	//apparently need this to override equals
+	public int hashCode() {
+		return 1;
+	}
+	
+	//TODO check if e already exists? Is that possible? Should I assume file will be good?
+	public void addNeighbor(Edge e) {
+		neighbors.add(e);
+	}
+	
+	public int neighborSize() {
+		return neighbors.size();
+	}
+	
+	public Edge getNeighbor(int index) {
+		return neighbors.get(index);
+	}
+	
+	public String getName() {
+		return name;
 	}
 	
 	public void setDistance(double d) {
