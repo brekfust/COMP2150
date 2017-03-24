@@ -3,6 +3,7 @@ import java.io.FileNotFoundException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Scanner;
 
 public class Graph {
@@ -16,7 +17,7 @@ public class Graph {
 	
 	
 	//TODO implement reset for vertexes, CLEAN UP, choose currentVisit if there is no smallest distance (largest are equal).
-	final private double inf = Double.POSITIVE_INFINITY;
+	final double inf = Double.POSITIVE_INFINITY;
 	private ArrayList<Vertex> vertices;
 	private ArrayList<Edge> edges;
 
@@ -29,6 +30,7 @@ public class Graph {
 		//TODO handle exception, including inputmismatch
 		//TODO would it be better to read in with array list, sort, and create from there?
 		//TODO anything to reduce bigO of this, too big
+		//TODO can we ever have a travel cost of 0 on an edge? how should it be considered?
 		Scanner reader = new Scanner(file);
 		while (reader.hasNext()) {
 			//if input file is good, 
@@ -68,55 +70,59 @@ public class Graph {
 	//attempt 1, don't think we'll use the edge list at all... is this right?
 	public ArrayList<Vertex> findPath(Vertex v1, Vertex v2) {
 		//TODO check that v1 and v2 are valid vertex. Is it necessary?
-		//init start vertex..
 		v1.setDistance(0f);
-		
 		boolean areWeDone = false;
 		while (!areWeDone) {
-			//find smallest distance
+			//find smallest unvisited distance
 			double small = inf;
 			int smallIndex = -1;
-			//for (int i = 0; i < vertices.size(); i++) {
-			int j = 0;
-			while (smallIndex == -1) {
-				if (vertices.get(j).getDistance() < small && vertices.get(j).isVisited() == false)
+			for (int j = 0; j < vertices.size(); j++) {
+				if (vertices.get(j).getDistance() < small && vertices.get(j).isVisited() == false) {
 					smallIndex = j; 
-				j++;
+					small = vertices.get(j).getDistance();
+				}
 			}
-			//nothing was smallest, just pick first unvisited
-			if (smallIndex == -1) {
-//				for (int i = 0; i < vertices.size(); i++) {
-//					if (!vertices.get(i).isVisited()) {
-//						smallIndex = i;
-//						break;
-//					}
-//				}
-				areWeDone = true;
-				break;
+
+			//nothing less than infinity was found, there is no path from v1 to v2
+			if (small == inf) {
+				//TODO throw some type of exception, create a new one?
 			}
 			
+			//Assign new possible distance for neighbors and give it current vertex as its shortest path
 			Vertex currentVisit = vertices.get(smallIndex);
+			Vertex neighbor;
 			double travelCost;
 			for (int i = 0; i < currentVisit.neighborSize(); i++){
+				neighbor = currentVisit.getNeighbor(i).getEnd();
+				if (neighbor.isVisited())
+					continue;
 				travelCost = currentVisit.getDistance() + currentVisit.getNeighbor(i).getWeight();
-				if (travelCost < currentVisit.getNeighbor(i).getEnd().getDistance() && currentVisit.getNeighbor(i).getEnd().isVisited() == false){
-					currentVisit.getNeighbor(i).getEnd().setDistance(travelCost);
-					currentVisit.getNeighbor(i).getEnd().setPrevious(currentVisit);
+				if (travelCost < neighbor.getDistance()){
+					neighbor.setDistance(travelCost);
+					neighbor.setPrevious(currentVisit);
 				}
 			}
 			currentVisit.setVisited(true);
 			
 			//check if it's time to exit loop
 			for (int i = 0; i < vertices.size(); i++) {
-				if (!vertices.get(i).isVisited()) {
-					areWeDone = false;
-					i = vertices.size();
-				}
-				if (i == vertices.size() -1)
+				if (!vertices.get(i).isVisited()) 
+					break;
+				if (i == vertices.size()-1)
 					areWeDone = true;
 			}
 		}
-		return vertices;
+		
+		//populate path (in reverse)
+		ArrayList<Vertex> shortestPath = new ArrayList<>();
+		for (Vertex temp = v2; temp != v1; temp = temp.getPrevious()) {
+			shortestPath.add(temp);
+		}
+		shortestPath.add(v1);
+		//TODO maybe use reverse iterator or something to avoid actually reversing the list? or provide linkedlist?
+		Collections.reverse(shortestPath);
+		
+		return shortestPath;
 		
 	}
 	
@@ -135,9 +141,11 @@ public class Graph {
 //			System.out.println(fun.edges.get(i).getWeight());
 //		}
 		
-		fun.findPath(fun.vertices.get(0), fun.vertices.get(1));
+		ArrayList<Vertex> somePath = fun.findPath(fun.vertices.get(0), fun.vertices.get(5));
 		for (int i = 0; i < fun.vertices.size(); i++)
 			System.out.println(fun.vertices.get(i).getName() + " distance " + fun.vertices.get(i).getDistance());
+		for (int i = 0; i < somePath.size(); i ++)
+			System.out.println(somePath.get(i).getDistance() + " -> " + somePath.get(i).getName() + " ");
 		
 	}
 	

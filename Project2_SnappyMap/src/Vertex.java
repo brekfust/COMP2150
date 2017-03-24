@@ -6,7 +6,7 @@ public class Vertex {
 //	(distance, visited status, and previous vertex).You can assume that all vertices
 //	in the graph will have unique names
 	
-	final public double inf = Double.POSITIVE_INFINITY;
+	final double inf = Double.POSITIVE_INFINITY;
 	private String name;
 	private double distance;
 	private boolean isVisited;
