@@ -189,10 +189,20 @@ public class LinkedListGeneric<E> implements ListGeneric<E> {
 		System.out.println(theList.toArrayList());
 		System.out.println("\nRemove Cogsworth");
 		theList.remove("Cogsworth");
+
+		theList.remove("Belle");
 		System.out.println(theList.toArrayList());
-		System.out.println(emptyList.toArrayList());
-		emptyList.remove("test");
-		System.out.println(emptyList.toArrayList());
+		LinkedListGeneric<Integer> failedList = new LinkedListGeneric<>();
+		failedList.add(new Integer(2));
+		failedList.add(new Integer(3));
+		failedList.add(new Integer(4));
+		failedList.add(new Integer(5));
+		System.out.println(failedList.toArrayList());
+		failedList.remove(new Integer(5));
+		System.out.println(failedList.toArrayList());
+		//System.out.println(emptyList.toArrayList());
+		//emptyList.remove("test");
+		//System.out.println(emptyList.toArrayList());
 	}
 	
 

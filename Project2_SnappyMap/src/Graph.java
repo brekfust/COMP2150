@@ -69,7 +69,6 @@ public class Graph {
 	
 	//attempt 1, don't think we'll use the edge list at all... is this right?
 	public ArrayList<Vertex> findPath(Vertex v1, Vertex v2) {
-		//TODO check that v1 and v2 are valid vertex. Is it necessary?
 		v1.setDistance(0f);
 		boolean areWeDone = false;
 		while (!areWeDone) {
