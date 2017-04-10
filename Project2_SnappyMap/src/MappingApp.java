@@ -1,5 +1,8 @@
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Scanner;
 
 public class MappingApp {
@@ -25,11 +28,16 @@ public class MappingApp {
 			try { 
 				File graphFile = new File(input.nextLine());
 				fun.fileImport(graphFile);
-			} catch (Exception e) {
-				//not seeing much reason to get more specific with exception type catches
+			} catch (ParseException e) {
+				System.out.println("I think something is wrong with your file.. Line " + e.getErrorOffset() + " looks funny to me.");
 				isWeird = true;
-				System.out.println("You did something weird. Try again.");
-			}
+			} catch (FileNotFoundException e) {
+				System.out.println("Did you type in the right file name?");
+				isWeird = true;
+			} catch (Exception e) {
+				System.out.println("You've done something weird. Try again.");
+				isWeird = true;
+			} 
 		} while(isWeird);
 		
 		System.out.println("Cool, cool cool cooooooool.");
@@ -107,9 +115,21 @@ public class MappingApp {
 				} while(yetAnotherRepeatFlag);
 				
 				//algorithm and output
-				ArrayList<Vertex> coolPath = fun.findPath(v1, v2);
-				for (int i = 0; i < coolPath.size(); i ++)
-					System.out.println(coolPath.get(i).getDistance() + " -> " + coolPath.get(i).getName() + " ");
+				LinkedList<Vertex> coolPath = fun.findPath(v1, v2);
+				if (coolPath == null) {
+					//no possible path, should only happen with bad file
+					System.out.println("Not sure what you're asking for is possible, bud.");
+				} else {
+					System.out.println("Take this path:");
+					//maybe if I had actually used the edge list I wouldn't have to do this silly math
+					double curCost = 0;
+					for (int i = 0; i < coolPath.size()-1; i ++) {
+						curCost = coolPath.get(i+1).getDistance() - coolPath.get(i).getDistance();
+						System.out.println(coolPath.get(i).getName() + " --(" + curCost + ")--> " + coolPath.get(i+1).getName() + " ");
+					}
+					//show distance of final element for total cost
+					System.out.println("This path will cost " + coolPath.get(coolPath.size() - 1).getDistance() + " of whatever that number means to you.");
+				}
 			}
 			
 			//shall we go again?

@@ -28,7 +28,7 @@ public class Vertex {
 	public boolean equals(Object o) {
 		if (o instanceof Vertex) {
 			Vertex isIt = (Vertex)o;
-			return (isIt.getName().equals(this.name));
+			return (isIt.getName().toUpperCase().equals(this.name.toUpperCase()));
 		}
 		return false;
 	}

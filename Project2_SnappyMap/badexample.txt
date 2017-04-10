@@ -10,7 +10,7 @@ Chch Eek 0.5
 Eek Chch 0.5
 Eek Foo 0.5
 Foo Chch 2.5
-Arr Bzz 0.5
+Arr Bzz 0.5 this extra bit should mess the file up.
 Bzz Chch 0.7
 Duuh Foo 4.5
 Eek Arr 1.5

@@ -1,9 +1,8 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.lang.reflect.Array;
+import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.LinkedList;
 import java.util.Scanner;
 
 public class Graph {
@@ -15,8 +14,6 @@ public class Graph {
 //o method that runs Dijkstra’s algorithm usinga specified start and end vertex
 //o toString method that includes information about the graph’s vertices and edges
 	
-	
-	//TODO implement reset for vertexes, CLEAN UP, choose currentVisit if there is no smallest distance (largest are equal).
 	final double inf = Double.POSITIVE_INFINITY;
 	private ArrayList<Vertex> vertices;
 	private ArrayList<Edge> edges;
@@ -26,50 +23,54 @@ public class Graph {
 		edges = new ArrayList<>();
 	}
 	
-	public void fileImport(File file) throws FileNotFoundException {
-		//TODO handle exception, including inputmismatch
-		//TODO would it be better to read in with array list, sort, and create from there?
-		//TODO anything to reduce bigO of this, too big
-		//TODO can we ever have a travel cost of 0 on an edge? how should it be considered?
+	public void fileImport(File file) throws FileNotFoundException, ParseException {
+		//TODO would it be better to read in with array list, then sort?
 		Scanner reader = new Scanner(file);
 		while (reader.hasNext()) {
 			//if input file is good, 
 			String line[] = reader.nextLine().split(" ");
 			if (line.length != 3) {
-				//TODO throw invalidformat of some kind
+				throw new ParseException("Line read does not have 3 strings.", edges.size() + 1);
 			}
 			
-			//TODO clean this up yo, this is stupid
-			//create vertices, keep index, find index if it already exists
-			int v1;
-			int v2;
-			if (!vertices.contains(new Vertex(line[0]))) {
-				v1 = vertices.size();
-				vertices.add(new Vertex(line[0]));
-			} else {
-				v1 = vertices.indexOf(new Vertex(line[0]));
-			}
-			if (!vertices.contains(new Vertex(line[1]))) {
-				v2 = vertices.size();
-				vertices.add(new Vertex(line[1]));
-			} else {
-				v2 = vertices.indexOf(new Vertex(line[1]));
-			}
+			//create vertices, see if it's already on the list
+			Vertex v1 = new Vertex(line[0]);
+			Vertex v2 = new Vertex(line[1]);
+			int v1Index = vertices.indexOf(v1);
+			int v2Index = vertices.indexOf(v2);
+			//indexOf returns -1 if it doesn't exist, so only add this if it's not already on the list
+			//and get the already existing vertex if it does
+			if (v1Index == -1) 
+				vertices.add(v1);
+			else 
+				v1 = vertices.get(v1Index);
+			
+			if (v2Index == -1) 
+				vertices.add(v2);
+			else 
+				v2 = vertices.get(v2Index);
 			
 			//get weight
 			double weight = Double.parseDouble(line[2]);
 			
-			//create edge
-			edges.add(new Edge(vertices.get(v1), vertices.get(v2), weight));
-			//tell first vertex what its neighbor is
-			//if file is valid, second neighbor will get that info eventually?
-			vertices.get(v1).addNeighbor(edges.get(edges.size()-1));
+			//create edge and give to first vertex
+			Edge curEdge = new Edge(v1, v2, weight);
+			edges.add(curEdge);
+			v1.addNeighbor(curEdge);
 		}
 	}
 	
-	//attempt 1, don't think we'll use the edge list at all... is this right?
-	public ArrayList<Vertex> findPath(Vertex v1, Vertex v2) {
+	//didn't really use the edge list.. might be losing efficiency
+	public LinkedList<Vertex> findPath(Vertex v1, Vertex v2) {
+		//set up
+		for (Vertex vert : vertices) {
+			vert.setDistance(inf);
+			vert.setVisited(false);
+			vert.setPrevious(null);
+		}
 		v1.setDistance(0f);
+		
+		//main loop
 		boolean areWeDone = false;
 		while (!areWeDone) {
 			//find smallest unvisited distance
@@ -82,10 +83,9 @@ public class Graph {
 				}
 			}
 
-			//nothing less than infinity was found, there is no path from v1 to v2
-			if (small == inf) {
-				//TODO throw some type of exception, create a new one?
-			}
+			//nothing less than infinity was found, there is no path from v1 to v2, or there is an unconnected vertex
+			if (small == inf)
+				return null;
 			
 			//Assign new possible distance for neighbors and give it current vertex as its shortest path
 			Vertex currentVisit = vertices.get(smallIndex);
@@ -112,23 +112,16 @@ public class Graph {
 			}
 		}
 		
-		//populate path (in reverse)
-		ArrayList<Vertex> shortestPath = new ArrayList<>();
+		//populate path. v2 to v1 is basically reversed linklist, so copying to real linkedlist to head each time should be correct path
+		LinkedList<Vertex> shortestPath = new LinkedList<>();
 		for (Vertex temp = v2; temp != v1; temp = temp.getPrevious()) {
-			shortestPath.add(temp);
-		}
-		shortestPath.add(v1);
-		//TODO maybe use reverse iterator or something to avoid actually reversing the list? or provide linkedlist?
-		Collections.reverse(shortestPath);
-		
+		shortestPath.add(0, temp);
+	}
+	shortestPath.add(0, v1);
 		return shortestPath;
-		
 	}
 	
-//	public boolean isThisARealVertexName(String s) {
-//		return vertices.contains(new Vertex(s));
-//	}
-	
+	//give reference of vertex with same name as string, null if it doesn't exist
 	public Vertex getVertexFromString(String s) {
 		int index = vertices.indexOf(new Vertex(s));
 		if (index == -1) 
@@ -140,7 +133,7 @@ public class Graph {
 	public String toString() {
 		String out = "";
 		for (int i = 0; i < edges.size(); i++){
-			out += "" + edges.get(i).getStart().getName() + " ---(";
+			out += "" + edges.get(i).getStart().getName() + " --(";
 			out += "" + edges.get(i).getWeight();
 			out += ")--> " + edges.get(i).getEnd().getName() + "\n";
 		}
@@ -150,26 +143,5 @@ public class Graph {
 		return out;
 	}
 	
-	public static void main(String[] args) throws FileNotFoundException {
-		File test = new File("example.txt");
-		Graph fun = new Graph();
-		fun.fileImport(test);
-		System.out.println("vertices " + fun.vertices.size());
-		System.out.println("edges " + fun.edges.size());
-
-//		for (int i = 0; i < fun.vertices.size(); i++)
-//			System.out.println(fun.vertices.get(i).getName() + " distance " + fun.vertices.get(i).getDistance());
-		for (int i = 0; i < fun.edges.size(); i++){
-			System.out.print(fun.edges.get(i).getStart().getName() + " + ");
-			System.out.print(fun.edges.get(i).getEnd().getName() + " + ");
-			System.out.println(fun.edges.get(i).getWeight());
-		}
-		ArrayList<Vertex> somePath = fun.findPath(fun.vertices.get(0), fun.vertices.get(5));
-		for (int i = 0; i < fun.vertices.size(); i++)
-			System.out.println(fun.vertices.get(i).getName() + " distance " + fun.vertices.get(i).getDistance());
-		for (int i = 0; i < somePath.size(); i ++)
-			System.out.println(somePath.get(i).getDistance() + " -> " + somePath.get(i).getName() + " ");
-		
-	}
 	
 }
