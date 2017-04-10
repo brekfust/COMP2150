@@ -11,7 +11,8 @@ public class Vertex {
 	private double distance;
 	private boolean isVisited;
 	private Vertex previous;
-	//is this OK? Should Vertex be able to use Edge?
+	//vertex containing a list of edges may go against the idea of the given
+	//project structure, but this seemed like the easiest way to lower the runtime
 	private ArrayList<Edge> neighbors;
 	
 	public Vertex(String n) {
@@ -22,6 +23,8 @@ public class Vertex {
 	}
 	
 	//need this to do a proper arraylist.contains
+	//we're only worried about checking for the name when using equals/contains
+	//this is probably bad practice.
 	public boolean equals(Object o) {
 		if (o instanceof Vertex) {
 			Vertex isIt = (Vertex)o;
@@ -35,7 +38,6 @@ public class Vertex {
 		return 1;
 	}
 	
-	//TODO check if e already exists? Is that possible? Should I assume file will be good?
 	public void addNeighbor(Edge e) {
 		neighbors.add(e);
 	}

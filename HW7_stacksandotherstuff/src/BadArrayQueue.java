@@ -2,9 +2,6 @@ import java.util.NoSuchElementException;
 
 public class BadArrayQueue<E> implements Queue<E> {
 
-//	public BadArrayQueue() {
-//		// TODO Auto-generated constructor stub
-//	}
 	//if we're doing it bad, let's do it really bad, array size always reflects data size
 	//no need to track anything
 	 private E[] data = (E[])(new Object[0]);
@@ -28,8 +25,8 @@ public class BadArrayQueue<E> implements Queue<E> {
 		E[] newData = (E[])(new Object[data.length+1]);
 		//new item is always head
 		newData[0] = newItem;
-		//may as well have used standard for since I have counter, but I haven't used
-		//foreach much before..
+		//may as well have used standard for loop, since I have counter, but I haven't used
+		//foreach much before and wanted to
 		int i = 1;
 		for (E item : data) {
 			newData[i++] = item;
@@ -61,6 +58,7 @@ public class BadArrayQueue<E> implements Queue<E> {
 			n00bs.enqueue(new Integer(i));
 		timer = System.currentTimeMillis() - timer;
 		System.out.println("100,000 ArrayQueue logins queued in " + timer + " milliseconds.");
+		
 		//dequeue logins arrayqueue
 		System.out.println("Processing...");
 		timer = System.currentTimeMillis();
@@ -77,6 +75,8 @@ public class BadArrayQueue<E> implements Queue<E> {
 			n00bs.enqueue(new Integer(i));
 		timer = System.currentTimeMillis() - timer;
 		System.out.println("100,000 new plebs accepted in " + timer + " milliseconds.\nBuffering..");
+		
+		//dequeue with BadArrayQueue
 		timer = System.currentTimeMillis();
 		for (int i = 0; i < 100000; i++)
 			n00bs.dequeue();

@@ -36,7 +36,7 @@ public class Graph {
 			//if input file is good, 
 			String line[] = reader.nextLine().split(" ");
 			if (line.length != 3) {
-				//TODO problem, check for empty strings to recover?
+				//TODO throw invalidformat of some kind
 			}
 			
 			//TODO clean this up yo, this is stupid
@@ -125,6 +125,31 @@ public class Graph {
 		
 	}
 	
+//	public boolean isThisARealVertexName(String s) {
+//		return vertices.contains(new Vertex(s));
+//	}
+	
+	public Vertex getVertexFromString(String s) {
+		int index = vertices.indexOf(new Vertex(s));
+		if (index == -1) 
+			return null;
+		else 
+			return vertices.get(index);
+	}
+	
+	public String toString() {
+		String out = "";
+		for (int i = 0; i < edges.size(); i++){
+			out += "" + edges.get(i).getStart().getName() + " ---(";
+			out += "" + edges.get(i).getWeight();
+			out += ")--> " + edges.get(i).getEnd().getName() + "\n";
+		}
+		out += "Total vertices: " + vertices.size() + "\n";
+		out += "Total edges: " + edges.size();
+		
+		return out;
+	}
+	
 	public static void main(String[] args) throws FileNotFoundException {
 		File test = new File("example.txt");
 		Graph fun = new Graph();
@@ -132,14 +157,13 @@ public class Graph {
 		System.out.println("vertices " + fun.vertices.size());
 		System.out.println("edges " + fun.edges.size());
 
-		for (int i = 0; i < fun.vertices.size(); i++)
-			System.out.println(fun.vertices.get(i).getName() + " distance " + fun.vertices.get(i).getDistance());
-//		for (int i = 0; i < fun.edges.size(); i++){
-//			System.out.print(fun.edges.get(i).getStart().getName() + " + ");
-//			System.out.print(fun.edges.get(i).getEnd().getName() + " + ");
-//			System.out.println(fun.edges.get(i).getWeight());
-//		}
-		
+//		for (int i = 0; i < fun.vertices.size(); i++)
+//			System.out.println(fun.vertices.get(i).getName() + " distance " + fun.vertices.get(i).getDistance());
+		for (int i = 0; i < fun.edges.size(); i++){
+			System.out.print(fun.edges.get(i).getStart().getName() + " + ");
+			System.out.print(fun.edges.get(i).getEnd().getName() + " + ");
+			System.out.println(fun.edges.get(i).getWeight());
+		}
 		ArrayList<Vertex> somePath = fun.findPath(fun.vertices.get(0), fun.vertices.get(5));
 		for (int i = 0; i < fun.vertices.size(); i++)
 			System.out.println(fun.vertices.get(i).getName() + " distance " + fun.vertices.get(i).getDistance());
