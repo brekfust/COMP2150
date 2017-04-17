@@ -25,7 +25,24 @@ public class BinarySearchTree<E extends Comparable<E>> {
 		return size;
 	}
 	
-
+	//TODO delete this stuff too, only for testing
+	public boolean isValidBST(E min, E max) {
+	    return isValidBST(root, min, max);    
+	}
+	 
+	public boolean isValidBST(Node<E> p, E min, E max){
+	    if(p==null) 
+	        return true;
+	 
+	    if (p.data.compareTo(min) < 0 || p.data.compareTo(max) > 0) { 
+	    	System.out.println(p.data + "killed it. comparto(" + min + ") = " + p.data.compareTo(min) + " and compareto(" + max + ") = " + p.data.compareTo(max));
+	    	return false;
+	    }
+	    
+	    
+	    return isValidBST(p.left, min, p.data) && isValidBST(p.right, p.data, max);
+	}
+	
 	// Wrapper method for inOrderTraversal
 	public void inOrderTraversal() {
 		System.out.println("In-order traversal:");
@@ -75,8 +92,10 @@ public class BinarySearchTree<E extends Comparable<E>> {
 	
 	// Wrapper method for add
 	public void add(E newData) {
-		if (root == null)	// special case for adding to the root of the tree
+		if (root == null) {	// special case for adding to the root of the tree
 			root = new Node<>(newData, null, null);
+			size++;
+		}
 		else
 			add(newData, root);
 	}
@@ -97,6 +116,9 @@ public class BinarySearchTree<E extends Comparable<E>> {
 			add(newData, where.left);	// recursively add to where's left subtree
 		else if (c > 0)
 			add(newData, where.right);	// recursively add to where's right subtree
+		else if (c == 0) 
+			//TODO delete this
+			System.out.println("attempt at duplicate add " + newData);
 	}
 
 	// Wrapper for book's add method.
