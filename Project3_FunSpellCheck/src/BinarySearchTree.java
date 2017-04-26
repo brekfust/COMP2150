@@ -5,7 +5,7 @@
  */
 public class BinarySearchTree<E extends Comparable<E>> {
 	// nested class to represent a single node in the tree
-	//  very similar to Node from LinkedList, but each node has two children instead of just one "next"
+	// very similar to Node from LinkedList, but each node has two children instead of just one "next"
 	private static class Node<E> {
 		private E data;
 		private Node<E> left, right;
@@ -25,24 +25,6 @@ public class BinarySearchTree<E extends Comparable<E>> {
 		return size;
 	}
 	
-	//TODO delete this stuff too, only for testing
-	public boolean isValidBST(E min, E max) {
-	    return isValidBST(root, min, max);    
-	}
-	 
-	public boolean isValidBST(Node<E> p, E min, E max){
-	    if(p==null) 
-	        return true;
-	 
-	    if (p.data.compareTo(min) < 0 || p.data.compareTo(max) > 0) { 
-	    	System.out.println(p.data + "killed it. comparto(" + min + ") = " + p.data.compareTo(min) + " and compareto(" + max + ") = " + p.data.compareTo(max));
-	    	return false;
-	    }
-	    
-	    
-	    return isValidBST(p.left, min, p.data) && isValidBST(p.right, p.data, max);
-	}
-	
 	// Wrapper method for inOrderTraversal
 	public void inOrderTraversal() {
 		System.out.println("In-order traversal:");
@@ -60,11 +42,10 @@ public class BinarySearchTree<E extends Comparable<E>> {
 	
 	//non-recursive add
 	public void addPoorly(E newData) {
-		if (root == null)
-			//empty list add
+		if (root == null)  //empty list
 			root = new Node<>(newData, null, null);
 		else {
-			//non empty list add, same process in while loop instead of recursion
+			//non empty list add, same process as add() without recursion
 			boolean added = false;
 			Node<E> curNode = root;
 			int c;
@@ -85,7 +66,6 @@ public class BinarySearchTree<E extends Comparable<E>> {
 					curNode = curNode.left;
 				else if (c > 0)
 					curNode = curNode.right;
-				//TODO be sure we will not be given a file with duplicate values, we need a c==0 if so
 			} while (!added);
 		}
 	}
@@ -116,9 +96,9 @@ public class BinarySearchTree<E extends Comparable<E>> {
 			add(newData, where.left);	// recursively add to where's left subtree
 		else if (c > 0)
 			add(newData, where.right);	// recursively add to where's right subtree
-		else if (c == 0) 
-			//TODO delete this
-			System.out.println("attempt at duplicate add " + newData);
+		//for testing
+//		else if (c == 0) 
+//			System.out.println("attempt at duplicate add " + newData);
 	}
 
 	// Wrapper for book's add method.
@@ -144,34 +124,25 @@ public class BinarySearchTree<E extends Comparable<E>> {
 	}
 
 	public E findPoorly(E someItem) {
-		//commented out empty list check, null check is done in start of loop so no need
-//		if (root == null)	// empty subtree - item not found!
-//			return null;
-//		else {
-			//same as find but in while loop
-			//boolean giveUpLooking = false;
-			Node<E> curNode = root;
-			int c;
-			do {
-				//return null if nothing here
-				if (curNode == null) {
-					return null;
-				}
-				
-				c = someItem.compareTo(curNode.data);
-				if (c == 0) {		// item found!
-					//giveUpLooking = true;
-					return curNode.data;
-				}
-				//look left or right depending on value
-				else if (c < 0) {
-					curNode = curNode.left;
-				}
-				else {
-					curNode = curNode.right;
-				}
-			} while (/*!giveUpLooking*/ true); //no need for flag... we'll return something eventually
-		//}
+		//same as find but in without recursion
+		Node<E> curNode = root;
+		int c;
+		do {
+			//return null if nothing here
+			if (curNode == null) {
+				return null;
+			}
+			
+			c = someItem.compareTo(curNode.data);
+			if (c == 0)	
+				return curNode.data; 	//item found!
+			else if (c < 0) {
+				curNode = curNode.left; //lesser values on left node
+			}
+			else { //(c > 0)
+				curNode = curNode.right; //greater values on the right
+			}
+		} while (true); //dangerous, but the null check at the start of the loop will keep us out of infinite loop
 	}
 	
 	// Wrapper method for find.
@@ -195,7 +166,6 @@ public class BinarySearchTree<E extends Comparable<E>> {
 		}
 	}
 	
-	
 	// Wrapper method for toString
 	public String toString() {
 		return toString(root, "");
@@ -209,20 +179,5 @@ public class BinarySearchTree<E extends Comparable<E>> {
 		else
 			return indent + where.data + "\n" + toString(where.left, indent + " ") + "\n" + toString(where.right, indent + " ");
 	}
-	
-	
-	public static void main(String[] args) {
-		BinarySearchTree<Double> theTree = new BinarySearchTree<>();
-		double[] x = {7, 2, 10, 1, 8, 1.5, 7.5, 9};
-		for (double d : x)
-			theTree.add_book(d);
-		
-		theTree.inOrderTraversal();
-		System.out.println(theTree);
-		
-		for (double d : x)
-			System.out.println(theTree.find(d));
-		System.out.println(theTree.find(-10.0));
-		System.out.println(theTree.find(6.0));
-	}
+
 }

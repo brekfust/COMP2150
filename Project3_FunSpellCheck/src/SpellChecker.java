@@ -1,4 +1,4 @@
-import java.util.ArrayList;
+import java.util.HashSet;
 
 public abstract class SpellChecker {
 
@@ -7,10 +7,10 @@ public abstract class SpellChecker {
 	
 	abstract boolean contains(String s);
 	
-	public ArrayList<String> closeMatches(String s) {
-		//TODO consolidate. Should be able to have 1 or 2 loops (actual indecies, and offsets, and do checks in one pass
-		//TODO this needs to actually return a Set. Fix this.
-		ArrayList<String> out = new ArrayList<>();
+	public HashSet<String> closeMatches(String s) {
+		//TODO consolidate. Should be able to have 1 or 2 loops (actual indices, and offsets, and do checks in one pass
+		HashSet<String> out = new HashSet<>();
+		
 		//each helper method will add to output list if it finds something
 		this.swapAdjChars(s, out);
 		this.insertCharAllPositions(s, out);
@@ -20,7 +20,7 @@ public abstract class SpellChecker {
 		return out;
 	}
 
-	private void swapAdjChars(String s, ArrayList<String> suggestions) {
+	private void swapAdjChars(String s, HashSet<String> suggestions) {
 		StringBuilder testWord = new StringBuilder(s);
 		//each char will swap to the char to it's left, this should check all adjacent swaps possible
 		for (int i=1; i < s.length(); i++) {
@@ -38,7 +38,7 @@ public abstract class SpellChecker {
 		}
 	}
 	
-	private void insertCharAllPositions(String s, ArrayList<String> suggestions) {
+	private void insertCharAllPositions(String s, HashSet<String> suggestions) {
 		//put string in stringbuilder, insert a char at each offset, loop through each character and check for a match
 		StringBuilder testWord = new StringBuilder(s);
 		for (int i=0; i <= s.length(); i++) {
@@ -52,7 +52,7 @@ public abstract class SpellChecker {
 		}
 	}
 	
-	private void deleteCharAllPositions(String s, ArrayList<String> suggestions) {
+	private void deleteCharAllPositions(String s, HashSet<String> suggestions) {
 		StringBuilder testWord = new StringBuilder(s);
 		char temp;
 		for (int i=0; i < s.length(); i++) {
@@ -64,7 +64,7 @@ public abstract class SpellChecker {
 		}
 	}
 	
-	private void replaceCharAllPositions(String s, ArrayList<String> suggestions) {
+	private void replaceCharAllPositions(String s, HashSet<String> suggestions) {
 		StringBuilder testWord = new StringBuilder(s);
 		char temp;
 		for (int i=0; i < s.length(); i++) {
@@ -86,7 +86,7 @@ public abstract class SpellChecker {
 		}
 	}
 	
-	private void insertSpaceAllPositions(String s, ArrayList<String> suggestions) {
+	private void insertSpaceAllPositions(String s, HashSet<String> suggestions) {
 		String word1, word2;
 		for (int i=1; i < s.length(); i++) {
 			word1 = s.substring(0, i);

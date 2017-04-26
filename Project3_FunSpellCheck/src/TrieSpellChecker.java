@@ -1,14 +1,18 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Scanner;
 
 public class TrieSpellChecker extends SpellChecker {
-
 	StringTrieTree wordList;
 	private static int count = 0;
+	
 	public TrieSpellChecker() {
 		wordList = new StringTrieTree();
+	}
+	
+	public int getSize() {
+		return count;
 	}
 	
 	public void add(String s) {
@@ -17,10 +21,6 @@ public class TrieSpellChecker extends SpellChecker {
 	
 	public boolean contains(String s) {
 		return wordList.contains(s);
-	}
-	
-	public int getSize() {
-		return count;
 	}
 	
 	//same as readWordListPoorly() from BST Spell Checker. Add order doesn't matter here.
@@ -42,14 +42,10 @@ public class TrieSpellChecker extends SpellChecker {
 		System.out.println("did it.");
 		System.out.println("added " + fun.getSize() + " words.");
 
-		ArrayList<String> guess = fun.closeMatches("slolth");
+		HashSet<String> guess = fun.closeMatches("slolth");
 		for (String word : guess ) {
 			System.out.println(word);
 		}
-		
-		//System.out.println("valid BST?: " + fun.wordList.isValidBST("a", "zzzzzzzzzzzzzz"));
-
-		
 	}
 	
 }
