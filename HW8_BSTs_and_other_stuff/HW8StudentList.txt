@@ -1,0 +1,37 @@
+Banner,Bruce,Physics
+Clegane,Gregor,Undecided
+Clegane,Sandor,Physical Education
+Cooper,Sheldon,Physics
+Ford,Harrison,Theatre
+Forel,Syrio,Theatre
+Hahn,Hilary,Music Performance
+Hanks,Tom,Theatre
+Hopper,Grace,Computer Science
+Howlett,James,Exercise and Sport Science
+Irenicus,Jon,Dark Arts
+Knuth,Donald,Computer Science
+Koothrappali,Raj,Astrophysics
+Lannister,Cersei,Social Work
+Lannister,Joffrey,Psychology
+Lin,Cho-Liang,Music Performance
+Lovelace,Ada,Computer Science
+Mendelssohn,Felix,Music Composition
+Moore,Gordon,Computer Engineering
+Nimitz,Chester,Naval Studies
+Pascal,Blaise,Mathematics
+Perlman,Itzhak,Music Performance
+Rivest,Ronald,Computer Science
+Rosen,Kenneth,Mathematics
+Shamir,Adi,Computer Science
+Shore,Howard,Music Composition
+Silvestri,Alan,Music Composition
+Smith,Fred,Management
+Snape,Severus,Dark Arts
+Stark,Arya,Undecided
+Stark,Eddard,Exercise and Sport Science
+Stark,Tony,Mechanical Engineering
+Summers,Scott,Social Work
+Torvalds,Linus,Computer Science
+Travolta,John,Theatre and Dance
+Wolowitz,Howard,Aerospace Engineering
+Xavier,Charles,Undecided

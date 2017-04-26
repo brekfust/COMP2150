@@ -161,16 +161,41 @@ public class RecursiveLL<E> {
 			return reverse(curNode, nextNode);
 		}
 	}
-	public static void main(String[] args) {
-		RecursiveLL<Integer> l = new RecursiveLL<>();
+	
+	public static RecursiveLL<String> createTestList(int i) {
+		RecursiveLL<String> l = new RecursiveLL<>();
+		for (int j = i; j >= 1; j--)
+		l.addToHead("" + j);
+		return l;
+		}
+
+		public static void main(String[] args) {
+		RecursiveLL<String> l;
+
+		int[] listLengths = {0, 1, 2, 3, 4, 10};
+
+		for (int i : listLengths) {
+		System.out.println("\nTesting reverse() for list of length " + i + ":");
+		l = createTestList(i);
 		System.out.println(l);
-		l.addToTail(4);
+		l.reverse();
+		System.out.println(l.contains("3"));
+		System.out.println(l.search("3"));
 		System.out.println(l);
-		l.addToTail(3);
-		System.out.println(l);
-		l.addToTail(2);
-		System.out.println(l);
-		System.out.println(l.reverse().data);
-		System.out.println(l);
-	}
+		}
+		}
+	
+//	public static void main(String[] args) {
+//		RecursiveLL<Integer> l = new RecursiveLL<>();
+//		System.out.println(l);
+//		l.addToTail(4);
+//		System.out.println(l);
+//		l.addToTail(3);
+//		System.out.println(l);
+//		l.addToTail(2);
+//		System.out.println(l);
+//		System.out.println(l.reverse().data);
+//		System.out.println(l);
+//		System.out.println(l.search(null));
+//	}
 }
