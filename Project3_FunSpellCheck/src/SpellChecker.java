@@ -1,11 +1,15 @@
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.HashSet;
 
 public abstract class SpellChecker {
 
-	//these abstracts chain to the SpellCheckers data structure
+	//the first two abstracts just chain to the spell checkers data structure
 	abstract void add(String s);
 	
 	abstract boolean contains(String s);
+	
+	abstract void readWordList(File f) throws FileNotFoundException;
 	
 	public HashSet<String> closeMatches(String s) {
 		//TODO consolidate. Should be able to have 1 or 2 loops (actual indices, and offsets, and do checks in one pass

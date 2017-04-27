@@ -13,49 +13,33 @@ public class BSTSpellChecker extends SpellChecker {
 	}
 
 	
-	public static void main(String[] args) throws FileNotFoundException {
-		// TODO use this for testing and delete at the end
-		File testFile = new File("Project3_wordlist.txt");
-		BSTSpellChecker fun = new BSTSpellChecker();
-		//fun.readWordListPoorly(testFile);
-		fun.readWordList(testFile);
-		System.out.println("did it.");
-		System.out.println("added " + fun.wordList.getSize() + " words.");
-
-		HashSet<String> guess = fun.closeMatches("slolth");
-		for (String word : guess ) {
-			System.out.println(word);
-		}
-		
-	}
-	
 	public void add(String s) {
 		wordList.add(s);
 	}
 	
-	private void addPoorly(String s) {
-		//non-recursive
-		wordList.addPoorly(s);
-	}
+//	private void addPoorly(String s) {
+//		//non-recursive
+//		wordList.addPoorly(s);
+//	}
 	
 	public boolean contains(String s) {
 		//only returns true if we get a null back from find
 		return (wordList.find(s) != null);
 	}
 	
-	private boolean containsPoorly(String s) {
-		//use non-recursive find
-		return (wordList.findPoorly(s) != null);
-	}
-	
-	//read from file line by line, use non-recursive addPoorly().
-	public void readWordListPoorly(File f) throws FileNotFoundException {
-		Scanner reader = new Scanner(f);
-		//just throw it all in there one by one, fam
-		while (reader.hasNext())
-			this.addPoorly(reader.nextLine());
-		reader.close();
-	}
+//	private boolean containsPoorly(String s) {
+//		//use non-recursive find
+//		return (wordList.findPoorly(s) != null);
+//	}
+//	
+//	//read from file line by line, use non-recursive addPoorly().
+//	public void readWordListPoorly(File f) throws FileNotFoundException {
+//		Scanner reader = new Scanner(f);
+//		//just throw it all in there one by one, fam
+//		while (reader.hasNext())
+//			this.addPoorly(reader.nextLine());
+//		reader.close();
+//	}
 	
 	//wrapper for recursive method
 	public void readWordList(File f) throws FileNotFoundException {

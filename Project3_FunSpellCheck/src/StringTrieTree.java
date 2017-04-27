@@ -1,15 +1,26 @@
 import java.util.HashMap;
 
-//Implemented with HashMap. These 
+//Trie implemented with HashMap.
 public class StringTrieTree { //no need to make TrieTree generic, we are sure of the data types
 	
-	private static class Node { //this is a very specific node, no need to make generic
+	private static class Node {		//Node data is handled by HashMap, no need to make generic
+		private boolean endOfWord;		//endOfWord boolean needed for contains() to work properly
 		private HashMap<String, Node> nodes;  	//no data variable needed, data is stored in the hash table that points to the node
-		private static int nodeCount = 0;		//Realized nodecount is the reason Trie is slower to add words and wanted to know how many nodes there are
+		private static int nodeCount = 0;	//not necessary but curious of this total
 		
 		private Node() {
 			this.nodes = new HashMap<>();
+			endOfWord = false;
 			nodeCount++;
+		}
+		
+		
+		public void setEndOfWord() {
+			this.endOfWord = true;
+		}
+		
+		public boolean isEndOfWord() {
+			return endOfWord;
 		}
 	}
 	
@@ -40,6 +51,7 @@ public class StringTrieTree { //no need to make TrieTree generic, we are sure of
 			//set up for next loop
 			curString = curString.substring(1);
 		}
+		curNode.setEndOfWord();
 		return;
 	}
 	
@@ -48,6 +60,7 @@ public class StringTrieTree { //no need to make TrieTree generic, we are sure of
 		String curString = s;
 		Node curNode = root;
 		
+		//check each character of the string for a corresponding node
 		while (!curString.isEmpty()) {
 			firstChar = curString.substring(0, 1);
 			
@@ -59,7 +72,8 @@ public class StringTrieTree { //no need to make TrieTree generic, we are sure of
 			curString = curString.substring(1);
 		}
 		
-		return true;
+		//the string is in the tree at this point, but we still need to check if it's the end of a word or not
+		return curNode.isEndOfWord();
 	}
 	
 }
