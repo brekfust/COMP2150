@@ -62,26 +62,40 @@ public class SpellCheckerClient {
 			
 			//ask for first word to check
 			System.out.print("Type you up a sentence and I'll check it out: ");
-			try {
-				strIn = input.nextLine();
-			} catch (Exception e) {
-				System.out.println("What did you say?: ");
-				continue;
-			}
 			
 			//start final loop
-			String[] wordsOfSentence;
-			loopIt = true;
-			HashSet<String> wordsMaybe;
-			while(loopIt) {
-				wordsOfSentence = strIn.split("\\s"); //split input sentence by whitespace
+			while(true) {
+				String[] wordsOfSentence;
+				HashSet<String> wordsMaybe;
 				
-				boolean misspelled = false; 	//flag if user misspells so we can make fun/compliment 
-				for (String word : wordsOfSentence) {	//loop through each word
-					if (word.equals("") || checker.contains(word)) //skip empty strings and words that in the dictionary
+				try {
+					strIn = input.nextLine();
+				} catch (Exception e) {
+					System.out.println("What did you say?: ");
+					continue;
+				}
+				
+				//user provided empty string
+				if (strIn.equals("")) {
+					System.out.println("Could you give me a little something more to work with?");
+					continue;
+					
+				//user doesn't know about these options until the next loop, but easiest to check these here
+				} else if (strIn.equals("!"))
+					return;
+				else if (strIn.equals("?"))
+					break;
+					
+				//split input sentence by whitespace
+				wordsOfSentence = strIn.split("\\s");
+				
+				boolean misspelled = false; 
+				for (String word : wordsOfSentence) {
+					if (word.equals("") || checker.contains(word)) //no action for empty strings and words in the dictionary
 						continue;
 					else {
-						wordsMaybe = checker.closeMatches(word);	//we have a misspelled word! 
+						//misspelled word actions
+						wordsMaybe = checker.closeMatches(word);
 						misspelled = true;
 						System.out.print(word + " is mispelled. It could be ");
 						if (wordsMaybe.size() > 0){
@@ -95,38 +109,24 @@ public class SpellCheckerClient {
 					}
 				}
 				
-				if (!misspelled) //made it through all those loops without misspelling anything
+				 //made it through without misspelling anything
+				if (!misspelled)
 					System.out.println("That sentence looks pretty good, surprisingly.");
-				
-//				//confusing if structure to cover our cases
-//				if (checker.contains(strIn))
-//					System.out.println("That's a word.");
-//				else {
-//					wordsMaybe = checker.closeMatches(strIn);
-//					if (!wordsMaybe.isEmpty()){
-//						System.out.println("Heh, no, no that's not a word.. Maybe you meant one of these?");
-//						for (String word : wordsMaybe)
-//							System.out.println(word);
-//					} else {
-//						System.out.println("No uh, definitely not a word...");
-//						System.out.println("Not really sure what to say about that one tbh.");
-//					}
-//				}
 				
 				System.out.println("Now you can type another word to check, or type \"!\" to quit, or \"?\" to start over");
 				System.out.print("What's it going to be?: ");
-				try {
-					strIn = input.nextLine();
-				} catch (Exception e) {
-					System.out.println("Let's just try again");
-					break;
-				}
+//				try {
+//					strIn = input.nextLine();
+//				} catch (Exception e) {
+//					System.out.println("Let's just try again");
+//					break;
+//				}
 				
 				//only need to check for quitting or starting over, strIn will carry to next loop to check for accuracy otherwise
-				if (strIn.equals("!"))
-					return; 	//exits program completely
-				else if (strIn.equals("?"))
-					break; 		//breaks out of loop to start main loop over again.
+//				if (strIn.equals("!"))
+//					return; 	//exits program completely
+//				else if (strIn.equals("?"))
+//					break; 		//breaks out of loop to start main loop over again.
 			}
 		}
 	}
